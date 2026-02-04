@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8">
+  <title>MRT FM TAMIL</title>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      background: black;
+      color: white;
+      text-align: center;
+      font-family: sans-serif;
+    }
+    h2 {
+      margin-top: 40px;
+    }
+    audio {
+      width: 90%;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>📻 MRT FM TAMIL</h2>
+
+  <audio controls autoplay>
+    <source src="https://server1.mahamediacast.com/proxy/amaravathifm/stream" type="audio/mpeg">
+  </audio>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js");
+    }
+  </script>
+
+</body>
+</html>
