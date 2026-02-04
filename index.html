@@ -2,41 +2,101 @@
 <html lang="ta">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MRT FM TAMIL</title>
 
+  <!-- PWA -->
   <link rel="manifest" href="manifest.json">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#d40000">
+
+  <!-- iOS Support -->
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
   <style>
     body {
-      background: black;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url("background.png") center/cover no-repeat fixed;
       color: white;
       text-align: center;
-      font-family: sans-serif;
     }
-    h2 {
-      margin-top: 40px;
+
+    .overlay {
+      background: rgba(0,0,0,0.7);
+      min-height: 100vh;
+      padding: 30px 10px;
     }
-    audio {
-      width: 90%;
+
+    img.logo {
+      width: 160px;
+      border-radius: 20px;
       margin-top: 20px;
+    }
+
+    h1 {
+      margin: 15px 0 5px;
+      color: #ff4444;
+    }
+
+    button {
+      margin-top: 20px;
+      font-size: 20px;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 30px;
+      background: #d40000;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      opacity: 0.8;
     }
   </style>
 </head>
 
 <body>
+  <div class="overlay">
+    <img src="icon-512.png" class="logo" alt="MRT FM Tamil Logo">
 
-  <h2>📻 MRT FM TAMIL</h2>
+    <h1>📻 MRT FM TAMIL</h1>
+    <p>உங்கள் கிராமத்து குரல்</p>
 
-  <audio controls autoplay>
-    <source src="https://server1.mahamediacast.com/proxy/amaravathifm/stream" type="audio/mpeg">
-  </audio>
+    <audio id="radio" src="https://server1.mahamediacast.com/proxy/amaravathifm/stream"></audio>
+
+    <button onclick="togglePlay()">▶ Play</button>
+
+    <footer>
+      © MRT FM TAMIL
+    </footer>
+  </div>
 
   <script>
+    const radio = document.getElementById("radio");
+    const btn = document.querySelector("button");
+
+    function togglePlay() {
+      if (radio.paused) {
+        radio.play();
+        btn.innerHTML = "⏸ Stop";
+      } else {
+        radio.pause();
+        btn.innerHTML = "▶ Play";
+      }
+    }
+
+    // Register Service Worker
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("service-worker.js");
     }
   </script>
-
 </body>
 </html>
