@@ -9,10 +9,9 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#d40000">
 
-  <!-- iOS Support -->
+  <!-- iOS -->
   <link rel="apple-touch-icon" href="icon-192.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
   <style>
     body {
@@ -24,28 +23,28 @@
     }
 
     .overlay {
-      background: rgba(0,0,0,0.3);
+      background: rgba(0,0,0,0.75);
       min-height: 100vh;
       padding: 30px 10px;
     }
 
-    img.logo {
+    .logo {
       width: 160px;
       border-radius: 20px;
       margin-top: 20px;
     }
 
     h1 {
-      margin: 15px 0 5px;
       color: #ff4444;
+      margin: 15px 0 5px;
     }
 
     button {
-      margin-top: 20px;
-      font-size: 20px;
-      padding: 12px 30px;
+      margin-top: 25px;
+      font-size: 22px;
+      padding: 14px 40px;
       border: none;
-      border-radius: 30px;
+      border-radius: 40px;
       background: #d40000;
       color: white;
       cursor: pointer;
@@ -65,38 +64,47 @@
 
 <body>
   <div class="overlay">
-    <img src="icon-512.png" class="logo" alt="MRT FM Tamil Logo">
+    <img src="icon-512.png" class="logo">
 
     <h1>📻 MRT FM TAMIL</h1>
     <p>உங்கள் கிராமத்து குரல்</p>
 
-    <audio id="radio" src="https://server1.mahamediacast.com/proxy/amaravathifm/stream"></audio>
+    <!-- AUDIO -->
+    <audio id="radio"></audio>
 
     <button onclick="togglePlay()">▶ Play</button>
 
-    <footer>
-      © MRT FM TAMIL
-    </footer>
+    <footer>© MRT FM TAMIL</footer>
   </div>
 
-  <script>
-    const radio = document.getElementById("radio");
-    const btn = document.querySelector("button");
+<script>
+  const streamURL =
+  "https://server1.mahamediacast.com/proxy/amaravathifm/stream";
 
-    function togglePlay() {
-      if (radio.paused) {
-        radio.play();
-        btn.innerHTML = "⏸ Stop";
-      } else {
-        radio.pause();
-        btn.innerHTML = "▶ Play";
-      }
-    }
+  const radio = document.getElementById("radio");
+  const btn = document.querySelector("button");
+  let playing = false;
 
-    // Register Service Worker
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("service-worker.js");
+  function togglePlay() {
+    if (!playing) {
+      radio.src = streamURL;
+      radio.load();
+      radio.play();
+      btn.innerHTML = "⏹ Stop";
+      playing = true;
+    } else {
+      radio.pause();
+      radio.src = "";
+      radio.load();
+      btn.innerHTML = "▶ Play";
+      playing = false;
     }
-  </script>
+  }
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js");
+  }
+</script>
+
 </body>
 </html>
