@@ -1,116 +1,139 @@
 <!DOCTYPE html>
 <html lang="ta">
 <head>
-  <meta charset="UTF-8">
-  <title>AMARAVATHI FM</title>
+<meta charset="UTF-8">
+<title>AMARAVATHI FM</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#000000">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<link rel="manifest" href="manifest.json">
 
-  <link rel="manifest" href="manifest.json">
+<style>
+body{
+  margin:0;
+  height:100vh;
+  background:url("background.png") center/cover no-repeat fixed;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  font-family:Arial;
+}
 
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background: url("background.png") no-repeat center center fixed;
-      background-size: cover;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
+audio{display:none;}
 
-    audio { display: none; }
+.disc{
+  width:160px;
+  height:160px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at center,#222 0%,#000 60%,#111 100%);
+  border:8px solid #ff1744;
+  box-shadow:0 0 15px #ff1744;
+  margin-bottom:30px;
+}
 
-    button {
-      padding: 8px 17px;
-      font-size: 10px;
-      border: none;
-      border-radius: 25px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.rotate{
+  animation:spin 1.5s linear infinite, glow 1.5s ease-in-out infinite;
+}
 
-    #playBtn {
-      background: #00c853;
-      color: white;
-    }
+@keyframes spin{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
 
-    #stopBtn {
-      background: #d50000;
-      color: white;
-      display: none;
-    }
+@keyframes glow{
+  0%{box-shadow:0 0 10px #00e676;}
+  50%{box-shadow:0 0 30px #00e676;}
+  100%{box-shadow:0 0 10px #00e676;}
+}
 
-    /* 🔄 Rotation animation */
-    .rotate {
-      animation: spin 1.2s linear infinite;
-    }
+button{
+  padding:16px 40px;
+  font-size:20px;
+  border:none;
+  border-radius:50px;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
+#playBtn{
+  background:#00c853;
+  color:white;
+}
 
-    .bottom-bar {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: rgba(0,0,0,0.85);
-      color: white;
-      padding: 10px;
-      font-size: 14px;
-      text-align: center;
-    }
-  </style>
+#stopBtn{
+  background:#d50000;
+  color:white;
+  display:none;
+}
+
+.bottom-stop{
+  position:fixed;
+  bottom:20px;
+}
+
+.status{
+  position:fixed;
+  bottom:80px;
+  width:100%;
+  text-align:center;
+  color:white;
+  background:rgba(0,0,0,0.7);
+  padding:8px;
+  font-size:14px;
+}
+</style>
 </head>
 
 <body>
 
-  <audio id="radio">
-    <source src="https://server1.mahamediacast.com/proxy/amaravathifm/stream" type="audio/mpeg">
-  </audio>
+<div id="disc" class="disc"></div>
 
-  <button id="playBtn" onclick="playRadio()">▶ PLAY</button>
+<audio id="radio">
+  <source src="https://server1.mahamediacast.com/proxy/amaravathifm/stream" type="audio/mpeg">
+</audio>
+
+<button id="playBtn" onclick="playRadio()">▶ PLAY</button>
+
+<div class="bottom-stop">
   <button id="stopBtn" onclick="stopRadio()">⏹ STOP</button>
+</div>
 
-  <div class="bottom-bar" id="status">📡 Ready</div>
+<div class="status" id="status">📡 Ready</div>
 
 <script>
-  const radio = document.getElementById("radio");
-  const playBtn = document.getElementById("playBtn");
-  const stopBtn = document.getElementById("stopBtn");
-  const status = document.getElementById("status");
+const radio=document.getElementById("radio");
+const playBtn=document.getElementById("playBtn");
+const stopBtn=document.getElementById("stopBtn");
+const disc=document.getElementById("disc");
+const status=document.getElementById("status");
 
-  function playRadio() {
-    radio.pause();
-    radio.currentTime = 0;
-    radio.load();
-    radio.play();
+function playRadio(){
+  radio.pause();
+  radio.currentTime=0;
+  radio.load();
+  radio.play();
 
-    playBtn.style.display = "none";
-    stopBtn.style.display = "inline-block";
-    stopBtn.classList.add("rotate");   // 🔄 start rotate
+  disc.classList.add("rotate");
+  playBtn.style.display="none";
+  stopBtn.style.display="inline-block";
+  status.innerText="▶ Live Streaming";
+}
 
-    status.innerText = "▶️ Live Streaming";
-  }
+function stopRadio(){
+  radio.pause();
+  radio.currentTime=0;
 
-  function stopRadio() {
-    radio.pause();
-    radio.currentTime = 0;
+  disc.classList.remove("rotate");
+  stopBtn.style.display="none";
+  playBtn.style.display="inline-block";
+  status.innerText="⏹ Stopped";
+}
 
-    stopBtn.classList.remove("rotate"); // ⛔ stop rotate
-    stopBtn.style.display = "none";
-    playBtn.style.display = "inline-block";
-
-    status.innerText = "⏹ Stopped";
-  }
-
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("service-worker.js");
-  }
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("service-worker.js");
+}
 </script>
 
 </body>
