@@ -45,15 +45,22 @@
     }
 
     /* 🔄 Rotation animation */
-    .rotate {
-      animation: spin 1.2s linear infinite;
-    }
+   .rotate {
+  animation: spin 6s linear infinite; /* 🐢 slow */
+}
 
     @keyframes spin {
       from { transform: rotate(0deg); }
       to   { transform: rotate(360deg); }
     }
-
+.controls {
+  position: fixed;
+  bottom: 70px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
     .bottom-bar {
       position: fixed;
       bottom: 0;
